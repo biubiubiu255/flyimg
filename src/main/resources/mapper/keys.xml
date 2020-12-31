@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyimg.dao.KeysMapper">
+
+
+    <!-- 查询对象存储key-->
+    <select id="selectKeys" parameterType="integer" resultType="com.flyimg.pojo.Keys">
+        SELECT
+            *
+        FROM
+            `keys`
+        WHERE
+            storage_type = #{storageType}
+    </select>
+
+    <!-- 查询对象存储key-->
+    <select id="getKeys" parameterType="integer" resultType="com.flyimg.pojo.Keys">
+        SELECT
+            *
+        FROM
+            `keys`
+    </select>
+
+    <update id="updateKey" parameterType="com.flyimg.pojo.Keys">
+        UPDATE `keys`
+        SET access_key = #{accessKey},
+        access_secret = #{accessSecret},
+        endpoint = #{endpoint},
+        bucketname = #{bucketname},
+        request_address = #{requestAddress}
+        WHERE
+            storage_type = #{storageType}
+    </update>
+</mapper>

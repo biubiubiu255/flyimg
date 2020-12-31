@@ -6,10 +6,10 @@ import com.flyimg.exception.CodeException;
 import com.flyimg.pojo.Group;
 import com.flyimg.pojo.User;
 import com.flyimg.service.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -19,9 +19,9 @@ import java.util.List;
  */
 @Service
 public class GroupServiceImpl implements GroupService {
-    @Autowired
+    @Resource
     private GroupMapper groupMapper;
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
     @Override
@@ -49,7 +49,7 @@ public class GroupServiceImpl implements GroupService {
             for (User user : userList) {
                 User u = new User();
                 u.setGroupid(1);
-                u.setUid(user.getUid());
+                u.setKey(user.getKey());
                 userMapper.change(u);
             }
 

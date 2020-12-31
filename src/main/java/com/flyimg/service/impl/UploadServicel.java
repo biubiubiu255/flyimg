@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.flyimg.dao.*;
 import com.flyimg.pojo.*;
-import com.flyimg.utils.*;
+import com.flyimg.comm.utils.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class UploadServicel {
     @Resource
     KeysMapper keysMapper;
     @Resource
-    ImgMapper imgMapper;
+    FileListMapper fileListMapper;
     @Resource
     UserMapper userMapper;
 
@@ -48,7 +48,7 @@ public class UploadServicel {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         Config config = configMapper.getSourceype();
-        UploadConfig uploadConfig = uploadConfigMapper.getUpdateConfig();
+        SysConfig sysConfig = uploadConfigMapper.getUpdateConfig();
         String userip = GetIPS.getIpAddr(request);
         java.text.DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         User u = (User) session.getAttribute("user");
@@ -80,10 +80,10 @@ public class UploadServicel {
             return msg;
         }
         //判断图片是否存在
-        if(imgMapper.md5Count(md5key)>0){
+        if(fileListMapper.md5Count(md5key)>0){
             Print.warning("图片存在啦");
-            Images images = imgMapper.selectImgUrlByMD5(md5key);
-            jsonObject.put("imgurls", images.getImgurl());
+            FileOSS fileOSS = fileListMapper.selectUriByMd5(md5key);
+            jsonObject.put("imgurls", fileOSS.getUri());
             jsonObject.put("imgnames",file.getName());
             jsonArray.add(jsonObject);
             msg.setData(jsonArray);
@@ -101,8 +101,8 @@ public class UploadServicel {
         }
 
         // 判断是否在黑名单内
-        if (uploadConfig.getBlacklist() != null) {
-            iparr = uploadConfig.getBlacklist().split(";");
+        if (sysConfig.getBlacklist() != null) {
+            iparr = sysConfig.getBlacklist().split(";");
             for (String s : iparr) {
                 if (s.equals(userip)) {
                     msg.setCode("911");
@@ -110,7 +110,7 @@ public class UploadServicel {
                 }
             }
         }
-        if (Integer.parseInt(Base64Encryption.decryptBASE64(upurlk)) != yzupdate()) {
+        if (Integer.parseInt(CryptoUtils.encodeBASE64(upurlk)) != yzupdate()) {
             msg.setCode("4003");
             return msg;
         }
@@ -118,9 +118,9 @@ public class UploadServicel {
         //验证文件是否是图片
         if (u == null) {
             sourcekey = GetCurrentSource.GetSource(null);
-            memory = uploadConfig.getVisitormemory();
-            maxsize = uploadConfig.getFilesizetourists();
-            usermemory = imgMapper.getusermemory(0);
+            memory = sysConfig.getMaxMemoryTourists();
+            maxsize = sysConfig.getMaxSizeTourists();
+            usermemory = fileListMapper.selectMoneyUsed(0);
             if (usermemory == null) {
                 usermemory = 0;
             }
@@ -128,20 +128,20 @@ public class UploadServicel {
             userpath = u.getUsername();
             sourcekey = GetCurrentSource.GetSource(u.getId());
             memory = userMapper.getUsers(u.getEmail()).getMemory();
-            maxsize = uploadConfig.getFilesizeuser();
-            usermemory = imgMapper.getusermemory(u.getId());
+            maxsize = sysConfig.getMaxSizeUser();
+            usermemory = fileListMapper.selectMoneyUsed(u.getId());
             if (usermemory == null) {
                 usermemory = 0;
             }
         }
-        if (uploadConfig.getUrltype() == 2) {
+        if (sysConfig.getUrltype() == 2) {
             userpath = dateFormat.format(new Date());
         }
         Keys key = keysMapper.selectKeys(sourcekey);
         if (sourcekey == 5) {
             b = true;
         } else {
-            b = StringUtils.doNull(sourcekey, key);
+            b = StringUtilsMy.doNull(sourcekey, key);
         }
         if (!b) {
             msg.setCode("4001");
@@ -164,30 +164,28 @@ public class UploadServicel {
         }
         Map<ReturnImage, Integer> m = null;
         m = GetSource.storageSource(key.getStorageType(), map, userpath, null, setday);
-        Images img = new Images();
+        FileOSS img = new FileOSS();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         for (Map.Entry<ReturnImage, Integer> entry : m.entrySet()) {
             if (key.getStorageType() == 5) {
                 if (config.getDomain() != null) {
                     jsonObject.put("imgurls", config.getDomain()  +"/"+ entry.getKey().getImgurl());
                     jsonObject.put("imgnames", entry.getKey().getImgname());
-                    img.setImgurl(config.getDomain()  +"/"+ entry.getKey().getImgurl());
+                    img.setUri(config.getDomain()  +"/"+ entry.getKey().getImgurl());
                 } else {
                     jsonObject.put("imgurls", config.getDomain()  +"/"+ entry.getKey().getImgurl());
                     jsonObject.put("imgnames", entry.getKey().getImgname());
-                    img.setImgurl("http://" + IpUtils.getLocalIP() + ":" + IpUtils.getLocalPort()  +"/"+ entry.getKey().getImgurl());//图片链接
+                    img.setUri("http://" + IpUtils.getLocalIP() + ":" + IpUtils.getLocalPort()  +"/"+ entry.getKey().getImgurl());//图片链接
                 }
             } else {
                 jsonObject.put("imgurls", entry.getKey().getImgurl());
                 jsonObject.put("imgnames", entry.getKey().getImgname());
-                img.setImgurl( entry.getKey().getImgurl());
+                img.setUri( entry.getKey().getImgurl());
             }
             jsonArray.add(jsonObject);
             img.setUpdatetime(df.format(new Date()));
-            img.setSource(key.getStorageType());
             img.setUserid(u == null ? 0 : u.getId());
-            img.setSizes((entry.getValue()) / 1024);
-            if(uploadConfig.getUrltype()==2){
+            if(sysConfig.getUrltype()==2){
                 //img.setImgname(SetText.getSubString(entry.getKey().getImgurl(), "", ""));
                 String[] imgname = entry.getKey().getImgurl().split ("/");
                 String name = "";
@@ -199,13 +197,13 @@ public class UploadServicel {
                         name+=imgname[i];
                     }
                 }
-                img.setImgname(entry.getKey().getImgname());
+                img.setFilename(entry.getKey().getImgname());
             }else{
-                img.setImgname(SetText.getSubString(entry.getKey().getImgurl(), key.getRequestAddress() + "/", ""));
+                img.setFilename(SetText.getSubString(entry.getKey().getImgurl(), key.getRequestAddress() + "/", ""));
             }
             img.setImgtype(setday > 0 ? 1 : 0);
             img.setAbnormal(userip);
-            img.setMd5key(md5key);
+            img.setMd5(md5key);
             userMapper.insertimg(img);
             long etime = System.currentTimeMillis();
             Print.Normal("上传图片所用时长：" + String.valueOf(etime - stime) + "ms");

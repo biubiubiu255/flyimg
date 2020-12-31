@@ -176,9 +176,9 @@
             success: function (data) {
                 var code = data.code;
                 var body = '';
-                //var imgList = data.data.imagesList; //&& typeof(imgList) != "undefined"
+                //var imgList = data.data.fileOSSList; //&& typeof(imgList) != "undefined"
                 if(code=='200'){
-                    var imgList = data.data.imagesList;
+                    var imgList = data.data.fileOSSList;
                     $('#webname').html(data.data.titlename);
                     $('#verification').hide();
                     $('#AlbumList').html('');

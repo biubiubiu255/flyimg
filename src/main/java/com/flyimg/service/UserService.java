@@ -1,22 +1,43 @@
 package com.flyimg.service;
 
-import com.flyimg.pojo.Images;
+import com.flyimg.pojo.FileOSS;
 import com.flyimg.pojo.User;
 
 import java.util.List;
 
 public interface UserService {
-    //注册
+    /**
+     * 新用户注册
+     */
     Integer register(User user);
 
-    //登录
-    Integer login(String email, String password,String uid);
+    /**
+     * 用户登录，成功返回userid，失败抛出异常
+     */
+    Integer login(String email, String password);
 
-    //获取用户信息
-    User getUsers(String email);
+    /**
+     * 获取用户 - 根据邮箱
+     */
+    User get(String email);
+
+    /**
+     * 获取用户 - 根据userid
+     */
+    User get(Integer userid);
+
+    /**
+     * 获取用户 - 根据私匙
+     */
+    User getByKey(String key);
+
+    /**
+     * 获取可用内存，支持自增，返回最新的内存剩余，填null则只获取，不自增 - 单位k
+     */
+    Long getMemAndIncr(Integer userid, Long addMemory);
 
     //插入图片
-    Integer insertimg(Images img);
+    Integer insertImg(FileOSS img);
 
     //修改资料
     Integer change(User user);
@@ -26,20 +47,20 @@ public interface UserService {
 
     Integer getUserTotal();
 
-    List<User> getuserlist(User user);
+    List<User> getUserList(User user);
 
-    Integer deleuser(Integer id);
+    Integer deleUser(Integer id);
 
     //查询用户名或者邮箱是否存在
-    Integer countusername(String username);
+    Integer countUsername(String username);
 
-    Integer countmail(String email);
+    Integer countMail(String email);
 
-    Integer uiduser(String uid);
+    Integer uidUser(String uid);
 
     User getUsersMail(String uid);
-    Integer setisok (User user);
-    Integer setmemory(User user);
+    Integer setIsok(User user);
+    Integer setMemory(User user);
     User getUsersid(Integer id);
-    List<User> getuserlistforgroupid(Integer groupid);
+    List<User> getUserListForGroupid(Integer groupid);
 }

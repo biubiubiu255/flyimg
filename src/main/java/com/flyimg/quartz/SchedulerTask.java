@@ -3,13 +3,12 @@ package com.flyimg.quartz;
 import com.alibaba.fastjson.JSON;
 import com.baidu.aip.contentcensor.AipContentCensor;
 import com.baidu.aip.contentcensor.EImgType;
-import com.flyimg.pojo.Images;
+import com.flyimg.pojo.FileOSS;
 import com.flyimg.pojo.Imgreview;
 import com.flyimg.pojo.Keys;
-import com.flyimg.service.impl.ImgServiceImpl;
+import com.flyimg.service.impl.FileServiceImpl;
 import com.flyimg.service.impl.ImgreviewServiceImpl;
 import com.flyimg.service.impl.KeysServiceImpl;
-import com.flyimg.utils.LocUpdateImg;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,7 @@ import java.util.List;
 public class SchedulerTask {
 
     @Autowired
-    private ImgServiceImpl imgService;
+    private FileServiceImpl imgService;
     @Autowired
     private ImgreviewServiceImpl imgreviewService;
     @Autowired
@@ -63,9 +62,9 @@ public class SchedulerTask {
             SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd");
             String oldtime = df.format(new Date(d.getTime() - 1 * 24 * 60 * 60 * 1000));
             //服务器获取出这个时间段的值然后遍历
-            List<Images> imglist=  schedulerTask.imgService.gettimeimg(oldtime);
-            for (Images images : imglist) {
-                String imgurl = images.getImgurl();
+            List<FileOSS> imglist=  schedulerTask.imgService.gettimeimg(oldtime);
+            for (FileOSS fileOSS : imglist) {
+                String imgurl = fileOSS.getUri();
                 System.err.println("正在鉴定的图片：" + imgurl);
                 JSONObject res = client.antiPorn(imgurl);
                 res = client.imageCensorUserDefined(imgurl, EImgType.URL, null);
@@ -80,7 +79,7 @@ public class SchedulerTask {
                             com.alibaba.fastjson.JSONObject imgdata = (com.alibaba.fastjson.JSONObject) datum;
                             if (imgdata.getInteger("type") == 1) {
                                 //标记图片
-                                Integer ret = schedulerTask.imgService.deleimgname(images.getImgname()); //删除数据库图片信息
+                                Integer ret = schedulerTask.imgService.deleimgname(fileOSS.getFilename()); //删除数据库图片信息
                                 //Imgreview imgreview1  =imgreviewService.selectByPrimaryKey(1);
                                 Imgreview imgreview1 = new Imgreview();
                                 imgreview1.setId(1);
@@ -89,29 +88,6 @@ public class SchedulerTask {
                                 imgreview1.setCount(count + 1);
                                 schedulerTask.imgreviewService.updateByPrimaryKeySelective(imgreview1);
                                 Keys key =null;
-                                if(images.getSource()==1){
-                                    key = keysService.selectKeys(images.getSource());
-                                    schedulerTask.imgService.delect(key, images.getImgname());
-                                }else if (images.getSource()==2){
-                                    key = keysService.selectKeys(images.getSource());
-                                    schedulerTask.imgService.delectOSS(key, images.getImgname());
-                                }else if(images.getSource()==3){
-                                    key = keysService.selectKeys(images.getSource());
-                                    schedulerTask.imgService.delectUSS(key, images.getImgname());
-                                }else if(images.getSource()==4){
-                                    key = keysService.selectKeys(images.getSource());
-                                    schedulerTask.imgService.delectKODO(key, images.getImgname());
-                                }else if(images.getSource()==5){
-                                    LocUpdateImg.deleteLOCImg(images.getImgname());
-                                }else if(images.getSource()==6){
-                                    key = keysService.selectKeys(images.getSource());
-                                    schedulerTask.imgService.delectCOS(key, images.getImgname());
-                                }else if(images.getSource()==7){
-                                    key = keysService.selectKeys(images.getSource());
-                                    schedulerTask.imgService.delectFTP(key, images.getImgname());
-                                }else{
-                                    System.err.println("未获取到对象存储参数，上传失败。");
-                                }
                                 if (ret == 1) {
                                     System.err.println("存在色情图片，删除成功。");
                                 } else {

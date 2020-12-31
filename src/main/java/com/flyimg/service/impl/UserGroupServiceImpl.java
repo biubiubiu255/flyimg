@@ -6,6 +6,8 @@ import com.flyimg.service.UserGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * @author Hellohao
  * @version 1.0
@@ -13,36 +15,36 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserGroupServiceImpl implements UserGroupService {
-    @Autowired
+    @Resource
     private UserGroupMapper userGroupMapper;
 
     @Override
-    public UserGroup useridgetusergroup(Integer userid) {
+    public UserGroup userIdGetUserGroup(Integer userid) {
         return userGroupMapper.useridGetUserGroup(userid);
     }
 
     @Override
-    public UserGroup idgetusergroup(Integer id) {
+    public UserGroup idGetUserGroup(Integer id) {
         return userGroupMapper.idGetUserGroup(id);
     }
 
     @Override
-    public Integer addusergroup(UserGroup userGroup) {
+    public Integer addUserGroup(UserGroup userGroup) {
         return userGroupMapper.addUserGroup(userGroup);
     }
 
     @Override
-    public Integer updateusergroup(UserGroup userGroup) {
+    public Integer updateUserGroup(UserGroup userGroup) {
         return userGroupMapper.updateUserGroup(userGroup);
     }
 
     @Override
-    public Integer updateusergroupdefault(Integer groupid) {
+    public Integer updateUserGroupDefault(Integer groupid) {
         return userGroupMapper.updateUserGroupDefault(groupid);
     }
 
     @Override
-    public Integer deleusergroup(Integer userid) {
+    public Integer deleUserGroup(Integer userid) {
         return userGroupMapper.deleUserGroup(userid);
     }
 }

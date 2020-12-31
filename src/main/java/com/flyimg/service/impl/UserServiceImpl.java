@@ -1,44 +1,75 @@
 package com.flyimg.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.flyimg.comm.enums.ResultCode;
+import com.flyimg.comm.utils.AssertUtil;
+import com.flyimg.comm.utils.CryptoUtils;
 import com.flyimg.dao.CodeMapper;
 import com.flyimg.dao.UserMapper;
 import com.flyimg.exception.CodeException;
-import com.flyimg.pojo.Images;
+import com.flyimg.pojo.FileOSS;
 import com.flyimg.pojo.User;
 import com.flyimg.service.UserService;
-import com.flyimg.utils.Print;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.flyimg.comm.utils.Print;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    @Resource
     private UserMapper userMapper;
-    @Autowired
+    @Resource
     private CodeMapper codeMapper;
+
     @Override
     public Integer register(User user) {
+        return userMapper.insert(user);
+    }
+
+
+    @Override
+    public Integer login(String email, String password) {
         // TODO Auto-generated method stub
-        return userMapper.register(user);
+        User user = userMapper.selectUserByEmail(email);
+        AssertUtil.isNotNullsEx(ResultCode.USER_USERNAME_NOT_EXIST, user);
+        AssertUtil.isTrue(user.getPassword().equals(CryptoUtils.encodeMD5(password)), ResultCode.USER_PASS_ERROR);
+        return user.getId();
     }
 
     @Override
-    public Integer login(String email, String password,String uid) {
+    public User get(String email) {
         // TODO Auto-generated method stub
-        return userMapper.login(email, password,uid);
+        return userMapper.selectUserByEmail(email);
     }
 
     @Override
-    public User getUsers(String email) {
+    public User get(Integer userid) {
         // TODO Auto-generated method stub
-        return userMapper.getUsers(email);
+        return userMapper.selectUserByUserid(userid);
+    }
+
+
+    @Override
+    public User getByKey(String key) {
+        // TODO Auto-generated method stub
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+        queryWrapper.eq("key",key);
+        return userMapper.selectOne(queryWrapper);
     }
 
     @Override
-    public Integer insertimg(Images img) {
+    public synchronized Long getMemAndIncr(Integer userid, Long addMemory) {
+        User user = userMapper.selectUserByUserid(userid);
+        AssertUtil.isNotNullsEx(ResultCode.USER_NOT_EXIST, user, user.getMemory(), user.getMemoryUsed());
+        return user.getMemory() - user.getMemoryUsed() - (addMemory==null ? 0L : addMemory);
+    }
+
+
+    @Override
+    public Integer insertImg(FileOSS img) {
         // TODO Auto-generated method stub
         return userMapper.insertimg(img);
     }
@@ -62,27 +93,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer deleuser(Integer id) {
+    public Integer deleUser(Integer id) {
         return userMapper.deleuser(id);
     }
 
     @Override
-    public Integer countusername(String username) {
+    public Integer countUsername(String username) {
         return userMapper.countusername(username);
     }
 
     @Override
-    public Integer countmail(String email) {
+    public Integer countMail(String email) {
         return userMapper.countmail(email);
     }
 
     @Override
-    public List<User> getuserlist(User user) {
+    public List<User> getUserList(User user) {
         return userMapper.getuserlist(user);
     }
 
     @Override
-    public Integer uiduser(String uid) {
+    public Integer uidUser(String uid) {
         return userMapper.uiduser(uid);
     }
 
@@ -92,12 +123,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer setisok(User user) {
+    public Integer setIsok(User user) {
         return userMapper.setisok(user);
     }
 
     @Override
-    public Integer setmemory(User user) {
+    public Integer setMemory(User user) {
         return userMapper.setmemory(user);
     }
 
@@ -107,7 +138,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getuserlistforgroupid(Integer groupid) {
+    public List<User> getUserListForGroupid(Integer groupid) {
         return userMapper.getuserlistforgroupid(groupid);
     }
 

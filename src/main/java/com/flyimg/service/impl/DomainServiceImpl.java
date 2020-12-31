@@ -5,6 +5,8 @@ import com.flyimg.service.DomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * @author Hellohao
  * @version 1.0
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DomainServiceImpl implements DomainService {
-    @Autowired
+    @Resource
     private  DomainMapper domainMapper;
 
     @Override

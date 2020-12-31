@@ -1,6 +1,5 @@
 
 server:
-    port: 8088
     max-http-header-size: 4048576
     tomcat:
         basedir: /data/upload_tmp
@@ -12,34 +11,11 @@ server:
 spring:
     profiles:
         active: dev
-    aop:
-        proxy-target-class: true
-    http:
-        multipart:
-            location: /data/upload_tmp
-    servlet:
-        multipart:
-            enabled: true
-            max-file-size: 100MB        #单个文件最大100MB
-            max-request-size: 150MB     #单个请求最大150MB
-            maxFileSize: 30MB
-            #maxRequestSize: BYTES_PER_MB
-    datasource:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        password: root
-        type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.0.133:3306/mktdesk_oss?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
-        username: root
-    jackson:
-        date-format: yyyy-MM-dd HH:mm:ss
-        time-zone: GMT+8
-    thymeleaf:
-        cache: false
-        mode: HTML
-        suffix: .html
-
-
-
+    cache:
+        type: caffeine
+        caffeine:
+            spec: initialCapacity=10,maximumSize=200,expireAfterWrite=300s #,refreshAfterWrite=10s
+        cache-names: user #可以用,号分割多个
 
 mybatis:
     configuration:
@@ -47,13 +23,10 @@ mybatis:
     mapper-locations: classpath:mapper/*.xml
 
 
-logging:
-    level:
-        cn:
-            hellohao:
-                dao: debug
-
-
 Expression: 0 30 04 * * ?
 
 systemupdate: '2019-11-29'
+
+#以下为框架业务配置 ==================================
+defalutHost: 127.0.0.1
+writeDirectory: /flyimgfile/

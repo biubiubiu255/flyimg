@@ -14,6 +14,7 @@ import java.util.List;
 public interface CodeService {
     //查询扩容码
     List<Code> selectCode(String value);
+
     Code selectCodekey(String code);
     //添加
     Integer addCode(Code code);

@@ -1,12 +1,12 @@
 package com.flyimg.service.impl;
 
 import com.flyimg.dao.ImgAndAlbumMapper;
-import com.flyimg.pojo.Images;
+import com.flyimg.pojo.FileOSS;
 import com.flyimg.pojo.ImgAndAlbum;
 import com.flyimg.service.ImgAndAlbumService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,8 +16,9 @@ import java.util.List;
  */
 @Service
 public class ImgAndAlbumServiceImpl implements ImgAndAlbumService {
-    @Autowired
+    @Resource
     ImgAndAlbumMapper imgAndAlbumMapper;
+
     @Override
     public Integer addImgAndAlbum(ImgAndAlbum imgAndAlbum) {
         return imgAndAlbumMapper.addImgAndAlbum(imgAndAlbum);
@@ -39,7 +40,7 @@ public class ImgAndAlbumServiceImpl implements ImgAndAlbumService {
     }
 
     @Override
-    public List<Images> selectImgForAlbumkey(String albumkey) {
+    public List<FileOSS> selectImgForAlbumkey(String albumkey) {
         return imgAndAlbumMapper.selectImgForAlbumkey(albumkey);
     }
 }

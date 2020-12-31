@@ -1,35 +1,34 @@
 package com.flyimg.pojo;
 
-/**
- * @author Hellohao
- * @version 1.0
- * @date 2019/8/15 13:27
- */
+import lombok.Data;
+
+@Data
 public class SysConfig {
-    private Integer id;
-    private Integer register;
+    private String suffix;
+    private Integer maxSizeTourists;
+    private Integer maxSizeUser;
+    private Integer maxCountTourists;
+    private Integer maxCountUser;
+    private Integer allowTouristsUp;
+    private Integer api;
+    private Integer maxMemoryTourists;
+    private Integer userMemory;
+    private String blacklist;
+
 
     public SysConfig() {
     }
 
-    public SysConfig(Integer id, Integer register) {
-        this.id = id;
-        this.register = register;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getRegister() {
-        return register;
-    }
-
-    public void setRegister(Integer register) {
-        this.register = register;
+    public SysConfig(String suffix, Integer maxSizeTourists, Integer maxSizeUser, Integer maxCountTourists, Integer maxCountUser, Integer urltype, Integer allowTouristsUp, Integer api, Integer maxMemoryTourists, Integer userMemory, String blacklist) {
+        this.suffix = suffix;
+        this.maxSizeTourists = maxSizeTourists;
+        this.maxSizeUser = maxSizeUser;
+        this.maxCountTourists = maxCountTourists;
+        this.maxCountUser = maxCountUser;
+        this.allowTouristsUp = allowTouristsUp;
+        this.api = api;
+        this.maxMemoryTourists = maxMemoryTourists;
+        this.userMemory = userMemory;
+        this.blacklist = blacklist;
     }
 }

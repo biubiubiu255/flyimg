@@ -22,13 +22,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-
-
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.10</version>
@@ -71,7 +64,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>5.2.12.RELEASE</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -90,6 +82,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
@@ -98,12 +91,6 @@
 
 
         <!-- 服务器配置信息依赖 -->
-        <dependency>
-            <groupId>org.fusesource</groupId>
-            <artifactId>sigar</artifactId>
-            <version>1.6.4</version>
-        </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -115,16 +102,33 @@
             <version>1.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
-            <version>1.9.6.2</version>
-        </dependency>
-
+        <!-- mysql基础连接package -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+        </dependency>
+
+        <!-- mybatis push -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.1</version>
+            <optional>true</optional>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
+
+        <!-- 常用字符串工具包 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
         </dependency>
 
         <dependency>
@@ -132,11 +136,13 @@
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>4.5</version>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
@@ -148,19 +154,32 @@
             <artifactId>commons-net</artifactId>
             <version>3.7.2</version>
         </dependency>
-        <!--hutool-->
-        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>4.5.16</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+            <version>1.18.8</version>
+            <scope>provided</scope>
         </dependency>
+
+        <!-- 目前最快的内存缓存模型 2020.12 -->
+        <!-- 同类推荐 Guava Cache，EhCache，Caffeine -->
+        <!-- spring的整合content已经支持spring-context-support了-->
+       <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.8.8</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.54</version>
         </dependency>
+
+
 
         <!-- =========================  第三方对接开始    ========================= -->
         <!--  百度ai平台-->
@@ -169,68 +188,11 @@
             <artifactId>java-sdk</artifactId>
             <version>4.11.0</version>
         </dependency>
-        <!--        又拍云-->
-        <dependency>
-            <groupId>com.upyun</groupId>
-            <artifactId>java-sdk</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-        <!--七牛-->
-        <dependency>
-            <groupId>com.qiniu</groupId>
-            <artifactId>qiniu-java-sdk</artifactId>
-            <version>7.2.22</version>
-        </dependency>
-        <!--        腾讯-->
-        <dependency>
-            <groupId>com.qcloud</groupId>
-            <artifactId>cos_api</artifactId>
-            <version>5.5.7</version>
-        </dependency>
-
-        <!--阿里云oss-->
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>2.8.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.netease.cloud</groupId>
-            <artifactId>nos-sdk-java-publiccloud</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-
-        <!--        <dependency>-->
-        <!--            <groupId>cn.ucloud.ufile</groupId>-->
-        <!--            <artifactId>ufile-client-java</artifactId>-->
-        <!--            <version>2.3.0</version>-->
-        <!--        </dependency>-->
         <!-- =========================  第三方对接结束    ========================= -->
 
     </dependencies>
 
     <build>
-
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.yml</include>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -238,6 +200,7 @@
                 <configuration>
                     <executable>true</executable>
                 </configuration>
+                <version>2.3.7.RELEASE</version>
             </plugin>
         </plugins>
     </build>

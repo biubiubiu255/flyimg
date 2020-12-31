@@ -1,10 +1,9 @@
 package com.flyimg.quartz;
 
 import com.flyimg.pojo.Keys;
-import com.flyimg.service.impl.ImgServiceImpl;
+import com.flyimg.service.impl.FileServiceImpl;
 import com.flyimg.service.impl.KeysServiceImpl;
-import com.flyimg.utils.DeleImg;
-import com.flyimg.utils.LocUpdateImg;
+import com.flyimg.comm.utils.DeleImg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,7 @@ import java.util.List;
 public class TempImgTask  {
 
     @Autowired
-    private ImgServiceImpl imgService;
+    private FileServiceImpl imgService;
     @Autowired
     private KeysServiceImpl keysService;
 
@@ -61,29 +60,6 @@ public class TempImgTask  {
                         if(sd1.after(sd2)){//等于false时说明图片时间大于或者等于当前时间
                             Integer ret = tempImgTask.imgService.deleimgname(strArr[0]);//删除库里图片数据
                             Keys key =null;
-                            if(Integer.parseInt(strArr[2])==1){
-                                key = tempImgTask.keysService.selectKeys(Integer.parseInt(strArr[2]));
-                                tempImgTask.imgService.delect(key,strArr[0]);
-                            }else if (Integer.parseInt(strArr[2])==2){
-                                key = tempImgTask.keysService.selectKeys(Integer.parseInt(strArr[2]));
-                                tempImgTask.imgService.delectOSS(key, strArr[0]);
-                            }else if(Integer.parseInt(strArr[2])==3){
-                                key = tempImgTask.keysService.selectKeys(Integer.parseInt(strArr[2]));
-                                tempImgTask.imgService.delectUSS(key, strArr[0]);
-                            }else if(Integer.parseInt(strArr[2])==4){
-                                key = tempImgTask.keysService.selectKeys(Integer.parseInt(strArr[2]));
-                                tempImgTask.imgService.delectKODO(key, strArr[0]);
-                            }else if(Integer.parseInt(strArr[2])==5){
-                                LocUpdateImg.deleteLOCImg(strArr[0]);
-                            }else if(Integer.parseInt(strArr[2])==6){
-                                key = tempImgTask.keysService.selectKeys(Integer.parseInt(strArr[2]));
-                                tempImgTask.imgService.delectCOS(key,strArr[0]);
-                            }else if(Integer.parseInt(strArr[2])==7){
-                                key = tempImgTask.keysService.selectKeys(Integer.parseInt(strArr[2]));
-                                tempImgTask.imgService.delectFTP(key, strArr[0]);
-                            }else{
-                                System.err.println("未获取到对象存储参数，上传失败。");
-                            }
                         }else{
                             //没有过期的临时图片
                             list.add(s);

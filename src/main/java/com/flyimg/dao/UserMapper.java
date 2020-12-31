@@ -1,25 +1,29 @@
 package com.flyimg.dao;
 
-import com.flyimg.pojo.Images;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.flyimg.pojo.FileOSS;
 import com.flyimg.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
-public interface UserMapper {
-    //注册
-    Integer register(User user);
+public interface UserMapper extends BaseMapper<User> {
 
-    //登录
-    Integer login(@Param("email") String email, @Param("password") String password,@Param("uid") String uid);
 
-    //获取用户信息
-    User getUsers(@Param("email") String email);
+    @Select("select password from user where email = #{username} limit 1")
+    String selectPassword(String email);
+
+
+    @Select("select password from user where email = #{email} limit 1")
+    User selectUserByEmail(String email);
+
+    @Select("select password from user where id = #{userid} limit 1")
+    User selectUserByUserid(Integer userid);
 
     //插入图片
-    Integer insertimg(Images img);
+    Integer insertimg(FileOSS img);
 
     //修改资料
     Integer change(User user);

@@ -1,10 +1,19 @@
 package com.flyimg.dao;
 
-import com.flyimg.pojo.UploadConfig;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.flyimg.pojo.SysConfig;
+import com.flyimg.pojo.User;
 
-@Mapper
-public interface UploadConfigMapper {
-    UploadConfig getUpdateConfig();
-    Integer setUpdateConfig(UploadConfig uploadConfig);
+
+public interface UploadConfigMapper  extends BaseMapper<SysConfig> {
+
+    /**
+     * 查询当前的oss全局规则
+     */
+    SysConfig select();
+
+    /**
+     * 修改oss全局规则
+     */
+    Integer updateConfig(SysConfig sysConfig);
 }

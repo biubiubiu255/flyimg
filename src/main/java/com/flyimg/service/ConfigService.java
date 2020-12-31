@@ -7,4 +7,7 @@ import org.springframework.stereotype.Service;
 public interface ConfigService {
     Config getSourceype();
     Integer setSourceype(Config config);
+
+    String getAA(String name);
+    String putAA(String name, String content);
 }

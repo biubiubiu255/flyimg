@@ -29,7 +29,7 @@
     <div class="layui-header">
         <!-- logo 区域 -->
         <div class="layui-logo">
-            <!--                <img src="images/security.png" alt="logo"/>-->
+            <!--                <img src="fileOSS/security.png" alt="logo"/>-->
 <!--            <cite>&nbsp;图床后台管理&emsp;</cite>-->
             <span id="titles">&nbsp;&nbsp;<i style="font-size: 1.5em;" class="layui-icon layui-icon-engine">&nbsp;&nbsp;</i>Console</span>
         </div>
@@ -48,16 +48,16 @@
         <!-- 头像区域 -->
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
-                <a lay-event="GoMain" title="返回首页"><img th:src="@{/layui/images/main.png}" alt=""
+                <a lay-event="GoMain" title="返回首页"><img th:src="@{/layui/fileOSS/main.png}" alt=""
                                                          style="height: 18px;"/></a>
             </li>
             <li class="layui-nav-item">
-                <a lay-event="clear" title="清理标签缓存"><img th:src="@{/layui/images/clear.png}" alt=""
+                <a lay-event="clear" title="清理标签缓存"><img th:src="@{/layui/fileOSS/clear.png}" alt=""
                                                          style="height: 18px;"/></a>
             </li>
             <li class="layui-nav-item">
                 <a>
-                    <img style="border-radius:20%; height: 25px;width: 25px;" th:src="@{/layui/images/avatar.png}"
+                    <img style="border-radius:20%; height: 25px;width: 25px;" th:src="@{/layui/fileOSS/avatar.png}"
                          class="layui-nav-img" alt="头像">
                     <span id="istime"></span>
                     <cite th:text="'你好！'+${username}"></cite>
