@@ -5,7 +5,7 @@
     <sql id="TABLE">file_list</sql>
 
     <!-- 查询-->
-    <select id="selectimg" parameterType="com.flyimg.pojo.FileOSS" resultType="com.flyimg.pojo.FileOSS">
+    <select id="selectimg" parameterType="com.flyimg.pojo.FileOss" resultType="com.flyimg.pojo.FileOss">
         SELECT
         *
         FROM
@@ -46,7 +46,7 @@
     </delete>
 
 
-    <select id="selectByPrimaryKey" parameterType="integer" resultType="com.flyimg.pojo.FileOSS">
+    <select id="selectByPrimaryKey" parameterType="integer" resultType="com.flyimg.pojo.FileOss">
         select * from <include refid="TABLE"/> where id = #{id}
     </select>
 
@@ -58,7 +58,7 @@
     </select>
 
     <!-- 根据图片名字，修改该对象中的其他字段属性 -->
-    <update id="updateByFilename" parameterType="com.flyimg.pojo.FileOSS">
+    <update id="updateByFilename" parameterType="com.flyimg.pojo.FileOss">
          UPDATE <include refid="TABLE"/>
              <set>
                  <if test="abnormal!=null">
@@ -81,7 +81,7 @@
         DELETE FROM <include refid="TABLE"/> WHERE id = #{id}
     </delete>
 
-    <select id="selectListFromTime" parameterType="string" resultType="com.flyimg.pojo.FileOSS">
+    <select id="selectListFromTime" parameterType="string" resultType="com.flyimg.pojo.FileOss">
         SELECT * from  <include refid="TABLE"/> WHERE  updated_time >= #{startTime}
     </select>
 <!--查询指定用户总内存-->
@@ -101,7 +101,7 @@
     </select>
 
 
-    <select id="selectUriByMd5" parameterType="string" resultType="com.flyimg.pojo.FileOSS">
+    <select id="selectUriByMd5" parameterType="string" resultType="com.flyimg.pojo.FileOss">
         select filename,uri from <include refid="TABLE"/> where md5 = #{md5}
     </select>
 

@@ -1,6 +1,6 @@
 package com.flyimg.service;
 
-import com.flyimg.pojo.FileOSS;
+import com.flyimg.pojo.FileOss;
 import com.flyimg.pojo.ImgAndAlbum;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +21,5 @@ public interface ImgAndAlbumService {
 
     Integer deleteImgAndAlbumForKey(String albumkey);
 
-    List<FileOSS> selectImgForAlbumkey(String albumkey);
+    List<FileOss> selectImgForAlbumkey(String albumkey);
 }

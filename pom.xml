@@ -163,6 +163,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <!-- 目前最快的内存缓存模型 2020.12 -->
         <!-- 同类推荐 Guava Cache，EhCache，Caffeine -->
         <!-- spring的整合content已经支持spring-context-support了-->

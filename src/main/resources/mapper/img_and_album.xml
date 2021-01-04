@@ -39,7 +39,7 @@
         delete from imgandalbum where albumkey=#{albumkey}
     </delete>
 
-    <select id="selectImgForAlbumkey" parameterType="string" resultType="com.flyimg.pojo.FileOSS">
+    <select id="selectImgForAlbumkey" parameterType="string" resultType="com.flyimg.pojo.FileOss">
         select * from imgdata a
                           LEFT JOIN imgandalbum b  on a.imgname = b.imgname
                           LEFT JOIN album c on b.albumkey = c.albumkey

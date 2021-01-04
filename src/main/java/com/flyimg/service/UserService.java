@@ -1,6 +1,6 @@
 package com.flyimg.service;
 
-import com.flyimg.pojo.FileOSS;
+import com.flyimg.pojo.FileOss;
 import com.flyimg.pojo.User;
 
 import java.util.List;
@@ -32,12 +32,12 @@ public interface UserService {
     User getByKey(String key);
 
     /**
-     * 获取可用内存，支持自增，返回最新的内存剩余，填null则只获取，不自增 - 单位k
+     * 获取可用内存，支持使用内存自增，返回最新的内存剩余，填null则只获取，不自增 - 单位k
      */
-    Long getMemAndIncr(Integer userid, Long addMemory);
+    Long getMemAndUsedMemIncr(Integer userid, Long decreaseMem);
 
     //插入图片
-    Integer insertImg(FileOSS img);
+    Integer insertImg(FileOss img);
 
     //修改资料
     Integer change(User user);

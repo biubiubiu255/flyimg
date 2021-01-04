@@ -40,19 +40,16 @@ public class CodeController {
         User u = (User) session.getAttribute("user");
         PageHelper.startPage(page, limit);
         List<Code> codes = null;
-        if (u.getLevel() > 1) {
-            codes = codeService.selectCode(null);
-            // 使用pageInfo包装查询
-            PageInfo<Code> rolePageInfo = new PageInfo<>(codes);
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("code", 0);
-            map.put("msg", "");
-            map.put("count", rolePageInfo.getTotal());
-            map.put("data", rolePageInfo.getList());
-            return map;
-        } else {
-            return null;
-        }
+        codes = codeService.selectCode(null);
+        // 使用pageInfo包装查询
+        PageInfo<Code> rolePageInfo = new PageInfo<>(codes);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("code", 0);
+        map.put("msg", "");
+        map.put("count", rolePageInfo.getTotal());
+        map.put("data", rolePageInfo.getList());
+        return map;
+
     }
 
     @RequestMapping("/deletecodes")

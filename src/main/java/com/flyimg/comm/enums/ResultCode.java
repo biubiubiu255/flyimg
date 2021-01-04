@@ -21,16 +21,18 @@ public enum ResultCode {
     PARAM_NOT_COMPLETE(10004, "参数缺失"),
     PARAM_METHOD_NOT_ALLOWED(10006,"不支持当前请求方法"),
     PARAM_METHOD_NOT_FOUND(10007,"方法不存在"),
-    PARAM_VERIFY_CODE_EX(1008,"验证码校验异常，请刷新本页面后再试"),
-    PARAM_VERIFY_CODE_ERROR(20006,"验证码不匹配"),
+    PARAM_VERIFY_CODE_EX(10008,"验证码校验异常，请重新获取后再试"),
+    PARAM_VERIFY_CODE_ERROR(10009,"验证码不匹配"),
+    PARAM_TICKET_NOT_FOUND(10010,"上传凭据不存在"),
 
     /* 用户错误：20001-29999*/
     USER_NOT_LOGGED_IN(20001, "用户未登录"),
     USER_USERNAME_NOT_EXIST(20002, "用户名不存在"),
-    USER_PASS_ERROR(20003, "密码错误"),
-    USER_NOT_EXIST(20004, "用户不存在"),
-    USER_HAS_EXISTED(20005, "用户已存在"),
-    USER_MEM_LESS(20006,"用户内存容量不足"),
+    USER_USERNAME_EXIST(20003, "用户名已存在"),
+    USER_PASS_ERROR(20004, "密码错误"),
+    USER_NOT_EXIST(20005, "用户不存在"),
+    USER_HAS_EXISTED(20006, "用户已存在"),
+    USER_MEM_LESS(20007,"用户内存容量不足"),
 
 
 
@@ -62,7 +64,8 @@ public enum ResultCode {
 
 
     /* 权限错误：70001-79999 */
-    PERMISSION_NO_ACCESS(70001, "无访问权限，用户token校验失败");
+    PERMISSION_NO_ACCESS(70001, "无访问权限，用户token校验失败"),
+    PERMISSION_NO_TOKEN(70002, "未发现请求token，权限校验失败");
 
 
 

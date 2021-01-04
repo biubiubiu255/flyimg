@@ -1,6 +1,6 @@
 package com.flyimg.dao;
 
-import com.flyimg.pojo.FileOSS;
+import com.flyimg.pojo.FileOss;
 import com.flyimg.pojo.ImgAndAlbum;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,5 +23,5 @@ public interface ImgAndAlbumMapper {
 
     Integer deleteImgAndAlbumForKey(@Param("albumkey") String albumkey);
 
-    List<FileOSS> selectImgForAlbumkey(@Param("albumkey") String albumkey);
+    List<FileOss> selectImgForAlbumkey(@Param("albumkey") String albumkey);
 }

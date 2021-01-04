@@ -8,6 +8,7 @@ server:
         threads:
             max: 1000
 
+
 spring:
     profiles:
         active: dev
@@ -16,11 +17,21 @@ spring:
         caffeine:
             spec: initialCapacity=10,maximumSize=200,expireAfterWrite=300s #,refreshAfterWrite=10s
         cache-names: user #可以用,号分割多个
+    # jackson时间格式化
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
 
 mybatis:
+    mapper-locations: classpath:mapper/*.xml
+    global-config:
+        id-type: 2
+        field-strategy: 1
+        db-column-underline: true
+        refresh-mapper: true
     configuration:
         map-underscore-to-camel-case: true
-    mapper-locations: classpath:mapper/*.xml
+        cache-enabled: false
 
 
 Expression: 0 30 04 * * ?

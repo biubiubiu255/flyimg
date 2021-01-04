@@ -1,5 +1,5 @@
 package com.flyimg.comm.utils;
-import com.flyimg.service.impl.FileServiceImpl;
+import com.flyimg.service.impl.FileOssOssServiceImpl;
 
 /**
  * @author Hellohao
@@ -14,7 +14,7 @@ public class GetIPS implements Runnable {
     }
     @Override
     public void run() {
-        FileServiceImpl imgService = SpringContextHolder.getBean(FileServiceImpl.class);
+        FileOssOssServiceImpl imgService = SpringContextHolder.getBean(FileOssOssServiceImpl.class);
     }
     public static void runxc(String imgnames){
         GetIPS getIPS = new GetIPS();

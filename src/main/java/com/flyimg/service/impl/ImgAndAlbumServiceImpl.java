@@ -1,7 +1,7 @@
 package com.flyimg.service.impl;
 
 import com.flyimg.dao.ImgAndAlbumMapper;
-import com.flyimg.pojo.FileOSS;
+import com.flyimg.pojo.FileOss;
 import com.flyimg.pojo.ImgAndAlbum;
 import com.flyimg.service.ImgAndAlbumService;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class ImgAndAlbumServiceImpl implements ImgAndAlbumService {
     }
 
     @Override
-    public List<FileOSS> selectImgForAlbumkey(String albumkey) {
+    public List<FileOss> selectImgForAlbumkey(String albumkey) {
         return imgAndAlbumMapper.selectImgForAlbumkey(albumkey);
     }
 }
