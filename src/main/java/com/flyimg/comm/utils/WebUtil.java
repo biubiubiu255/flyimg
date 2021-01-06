@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Enumeration;
 import java.util.UUID;
 
 /**
@@ -354,6 +355,11 @@ public final class WebUtil {
      * 获取远程IP，适用于反向代理模式
      */
     public static String getRemoteIP(HttpServletRequest request){
+/*        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()){
+            String s = headerNames.nextElement();
+            System.out.println(s+": "+request.getHeader(s));
+        }*/
         String ip = request.getHeader("X-Forwarded-For");
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)){
             //多次反向代理后会有多个ip值，第一个ip才是真实ip

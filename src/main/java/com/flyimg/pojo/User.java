@@ -20,7 +20,7 @@ public class User {
     private String  email;
     private String  phone;
     private Integer status;
-    private String  token;
+    private String  secret;
     private Integer memory;
     private Integer memoryUsed;
     private Long createdTime;

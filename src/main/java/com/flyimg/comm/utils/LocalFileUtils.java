@@ -1,16 +1,7 @@
 package com.flyimg.comm.utils;
 
-import com.flyimg.pojo.ReturnImage;
-import com.flyimg.pojo.SysConfig;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class LocalFileUtils {
 

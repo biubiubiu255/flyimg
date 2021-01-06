@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyimg.comm.enums.ResultCode;
 import com.flyimg.pojo.*;
 import com.flyimg.comm.utils.*;
+import com.flyimg.pojo.vo.MyException;
 import com.flyimg.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -54,16 +56,18 @@ public class UploadServiceImpl implements UploadService {
         // 下面是纯文件上传流程
         String uri;
         String md5;
-        String fileName;
-        String dir = directoryMake(uploadParam.getNewDirectory());
+        String filename;
+        String dir = makeDirectory(uploadParam.getNewDirectory());
         if (uploadParam.getVaildSec()==null){
             uploadParam.setVaildSec(365*30*86400);  // 默认是一个月
         }
 
         try {
             md5 = CryptoUtils.encodeMD5(file.getBytes());
-            fileName = StringUtils.isNoneBlank(uploadParam.getNewFilename()) ? uploadParam.getNewFilename() : md5;
-            uri = "/" + dir + fileName;
+            filename = makeFilename(uploadParam.getNewFilename(), file.getOriginalFilename(), md5);
+            filename = URLEncoder.encode(filename, "utf-8");
+            log.info("文件名 {} {}", file.getOriginalFilename(), file.getName(), file.getContentType());
+            uri = "/" + dir + filename;
             FileSave global = fileSaveService.getByMd5(md5);
             if (global==null){
                 FileSave fileSave = new FileSave();
@@ -87,8 +91,9 @@ public class UploadServiceImpl implements UploadService {
                 fileOssNew.setUserid(userid);
                 fileOssNew.setUri(uri);
                 fileOssNew.setDir(dir);
-                fileOssNew.setFilename(fileName);
-                fileOssNew.setSuffix(fileName.lastIndexOf(".")!=-1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : "");
+                fileOssNew.setFilename(filename);
+                fileOssNew.setSize((int)file.getSize());
+                fileOssNew.setSuffix(makeSuffix(filename));
                 fileOssService.add(fileOssNew);
             }
         } catch (IOException e) {
@@ -97,7 +102,7 @@ public class UploadServiceImpl implements UploadService {
         UploadResult uploadResult = new UploadResult();
         uploadResult.setMd5(md5);
         uploadResult.setFilename(file.getOriginalFilename());
-        uploadResult.setUrl("http://" + defalutHost + dir + "/" + fileName);
+        uploadResult.setUrl("http://" + defalutHost + dir + "/" + filename);
         uploadResult.setStatus(1);
         return  uploadResult;
     }
@@ -120,14 +125,11 @@ public class UploadServiceImpl implements UploadService {
         return list;
     }
 
-    public static void main(String[] args) {
-        System.out.println(directoryMake("////sdfsdfsd///////"));
-    }
 
     /**
      * 修正目录名格式，返回 xxxxx/
      */
-    private static String directoryMake(String dir){
+    private static String makeDirectory(String dir){
         String dirNew = dir;
         if (StringUtils.isEmpty(dirNew)){
             dirNew = "";
@@ -146,7 +148,31 @@ public class UploadServiceImpl implements UploadService {
     }
 
     /**
-     * 根据传入headerList内容获取用户的模板code
+     * 修正文件名格式
+     */
+    private static String makeFilename(String filename1, String filename2, String filename3){
+        if (StringUtils.isNoneBlank(filename1)){
+            return filename1;
+        }
+        if (StringUtils.isNoneBlank(filename2)){
+            return filename2;
+        }
+        if (StringUtils.isNoneBlank(filename3)){
+            return filename3;
+        }
+        return "";
+    }
+
+    /**
+     * 修正文件名格式
+     */
+    private static String makeSuffix(String filename){
+        return filename.contains(".") ? filename.substring(filename.lastIndexOf(".") + 1) : "";
+    }
+
+    /**
+     * 根据用户传入的参数headers获取用户headers模板
+     * 返回模板id
      */
     private Integer getHeaderCode(List<String> headerList, Integer userid){
         Integer code = 0;
@@ -176,7 +202,7 @@ public class UploadServiceImpl implements UploadService {
                         httpHeader.setExpires(val);
                         break;
                     default:
-                        httpHeader.setOthers(StringUtils.isEmpty(httpHeader.getOthers()) ? val : httpHeader.getOthers()+"\n"+val);
+                        httpHeader.setOthers(StringUtils.isEmpty(httpHeader.getOthers()) ? line : httpHeader.getOthers()+"\n"+line);
                         break;
                 }
             }
@@ -185,8 +211,8 @@ public class UploadServiceImpl implements UploadService {
             if (one==null){
                 boolean save = httpHeaderService.save(httpHeader);
                 one = httpHeaderService.getOne(queryWrapper);
-                code = one.getId();
             }
+            code = one.getId();
         }
         return code;
     }

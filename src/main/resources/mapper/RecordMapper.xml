@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyimg.dao.RecordMapper">
+
+
+    <insert id="insertAndIncr" parameterType="com.flyimg.pojo.Record">
+        insert into record (`userid`, `uri`, `visitor_ip`, `num`, `days`)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.userid}, #{item.uri}, #{item.visitorIp}, #{item.num}, #{item.days})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        `num` = `num` + 1
+    </insert>
+
+
+    <select id="selectWebPanel" resultType="com.flyimg.pojo.WebPanel">
+        SELECT
+            a.request_num,
+            b.flow_yesterday,
+            c.mem_banlance,
+            d.file_num
+        FROM
+            (
+                SELECT
+                    sum(num) AS request_num
+                FROM
+                    record
+                WHERE
+                    userid = #{userid}
+            ) AS a,
+            (
+                SELECT
+                    sum(a.num * b.size) AS flow_yesterday
+                FROM
+                    (
+                        SELECT
+                            userid,
+                            uri,
+                            sum(num) AS num
+                        FROM
+                            record
+                        WHERE
+                            userid = #{userid}
+                        AND days = #{days}
+                        GROUP BY
+                            userid,
+                            uri
+                    ) AS a
+                INNER JOIN file_list AS b ON a.userid = b.userid
+                AND a.uri = b.uri
+            ) AS b,
+            (
+                SELECT
+                    memory - memory_used AS mem_banlance
+                FROM
+                    `user`
+                WHERE
+                    id = #{userid}
+            ) AS c,
+            (
+                SELECT
+                    count(DISTINCT(md5)) AS file_num
+                FROM
+                    file_list
+                WHERE
+                    userid = #{userid}
+            ) AS d
+    </select>
+
+</mapper>

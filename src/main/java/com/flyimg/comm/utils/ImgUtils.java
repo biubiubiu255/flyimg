@@ -172,4 +172,106 @@ public class ImgUtils {
             default: return "0000";
         }
     }
+
+
+    public static String suffixToContentType(String suffix) {
+        String word = "." + suffix.replace(".", "");
+        String mType;
+        switch (word){
+            case ".ai":
+                mType = "application/postscript";
+                break;
+            case ".avi":
+                mType = "video/avi";
+                break;
+            case ".class":
+                mType = "java/*";
+                break;
+            case ".css":
+                mType = "text/css";
+                break;
+            case ".dll":
+                mType = "application/x-msdownload";
+                break;
+            case ".exe":
+                mType = "application/x-msdownload";
+                break;
+            case ".ico":
+                mType = "application/x-ico";
+                break;
+            case ".htm":
+                mType = "text/html";
+                break;
+            case ".html":
+                mType = "text/html";
+                break;
+            case ".m3u":
+                mType = "audio/mpegurl";
+                break;
+            case ".mp3":
+                mType = "audio/mp3";
+                break;
+            case ".pdf":
+                mType = "application/pdf";
+                break;
+            case ".ppt":
+                mType = "application/x-pp";
+                break;
+            case ".pptx":
+                mType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                break;
+            case ".bmp":
+                mType = "application/x-bmp";
+                break;
+            case ".doc":
+                mType = "application/msword";
+                break;
+            case ".docx":
+                mType = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+                break;
+            case ".gif":
+                mType = "image/gif";
+                break;
+            case ".js":
+                mType = "text/html";
+                break;
+            case ".xhtml":
+                mType = "text/html";
+                break;
+            case ".rmvb":
+                mType = "application/vnd.rn-realmedia-vbr";
+                break;
+            case ".svg":
+                mType = "application/vnd.rn-realmedia-vbr";
+                break;
+            case ".xml":
+                mType = "application/vnd.rn-realmedia-vbr";
+                break;
+            case ".swf":
+                mType = "application/x-shockwave-flash";
+                break;
+            case ".txt":
+                mType = "text/plain";
+                break;
+            case ".wav":
+                mType = "audio/wav";
+            case ".xls":
+                mType = "application/x-xls";
+            case ".xlsx":
+                mType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            case ".jpeg":
+                mType = "image/jpeg";
+                break;
+            case ".jpg":
+                mType = "image/jpeg";
+                break;
+            case ".png":
+                mType = "image/png";
+                break;
+            default:
+                mType = "application/" + suffix.replace(".", "");
+                break;
+        }
+        return mType;
+    }
 }

@@ -3,7 +3,8 @@ package com.flyimg.service;
 
 import com.flyimg.pojo.FileOss;
 
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 
 public interface FileOssService {
 
@@ -11,32 +12,12 @@ public interface FileOssService {
 
     FileOss getByUri(String uri, Integer userid);
 
+    FileOss getByUriGuess(String uri);
+
+    Long writeOutputStream(String md5, String suffix, ByteArrayOutputStream byteArrayOutputStream);
+
+    Long writeOutputStreamQ(String md5, String suffix, OutputStream outputStream);
+
     Integer updataFileOss(FileOss fileOSS);
-
-
-
-    List<FileOss> selectimg(FileOss fileOSS);
-
-    Integer deleimg(Integer id);
-
-    Integer countimg(Integer userid);
-
-    FileOss selectByPrimaryKey(Integer id);
-
-    Integer counts(Integer userid);
-
-    Integer setImg(FileOss fileOSS);
-
-    Integer deleimgname(String imgname);
-
-    Integer deleall(Integer id);
-
-    List<FileOss> gettimeimg(String time);
-
-    Integer getusermemory(Integer userid);
-
-    Integer md5Count(String md5key);
-
-    FileOss selectImgUrlByMD5(String md5key);
 
 }

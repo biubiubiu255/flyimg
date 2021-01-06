@@ -1,6 +1,5 @@
 package com.flyimg.comm.utils;
 
-import com.flyimg.pojo.Config;
 import com.flyimg.pojo.EmailConfig;
 
 import javax.mail.*;
@@ -32,7 +31,7 @@ public class SendEmail {
         MimeMessage message = new MimeMessage(session);
         return message;
     }
-
+/*
     public static Integer sendEmail(MimeMessage message, String username, String Url, String email, EmailConfig emailConfig, Config config) {
         String webname=config.getWebname();
         String domain = config.getDomain();
@@ -89,6 +88,8 @@ public class SendEmail {
             return 0;
         }
     }
+*/
+
 
 
 }

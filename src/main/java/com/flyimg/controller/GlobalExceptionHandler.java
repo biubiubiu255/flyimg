@@ -1,9 +1,8 @@
 package com.flyimg.controller;
 
 import com.flyimg.comm.enums.ResultCode;
-import com.flyimg.comm.utils.StringUtilsMy;
-import com.flyimg.pojo.MyException;
-import com.flyimg.pojo.Result;
+import com.flyimg.pojo.vo.MyException;
+import com.flyimg.pojo.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;

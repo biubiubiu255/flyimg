@@ -1,7 +1,8 @@
-package com.flyimg.pojo;
+package com.flyimg.pojo.vo;
 
 import com.flyimg.comm.enums.ResultCode;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @author ahser
  */
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class MyException extends RuntimeException implements Serializable {
 
 	private static final long serialVersionUID = -3948389268046368059L;

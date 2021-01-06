@@ -35,10 +35,8 @@ public enum ResultCode {
     USER_MEM_LESS(20007,"用户内存容量不足"),
 
 
-
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),
-
 
     /* 系统错误：40001-49999 */
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),

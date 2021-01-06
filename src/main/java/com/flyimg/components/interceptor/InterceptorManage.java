@@ -29,31 +29,6 @@ public class InterceptorManage implements WebMvcConfigurer {
         //registry.addInterceptor(interceptorConfig).addPathPatterns("admin/**").excludePathPatterns("/login", "/register");
         registry.addInterceptor(interceptorLogin).addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/static/**",
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/**/*.png",
-                        "/**/*.jpg",
-                        "/**/*.jpeg",
-                        "/**/*.gif",
-                        "/**/fonts/*",
-                        "/**/*.svg",
-                        "/ts/**",
-                        "/clientupimg/**",
-                        "/clientupurlimg/**",
-                        "/clientlogin/**",
-                        "/notices/**",
-                        "/systemupdate/**",
-                        "/getdomain/**",
-                        "/getNoticeText/**",
-                        "/getNotice/**",
-                        "/addalbum/**",
-                        "/addalbum/**",
-                        "/SaveForAlbum/**",
-                        "/TOALBUM*N/**",
-                        "/TOALBUM*N/**",
-
-
                         "/errorException",
                         "/user/login",
                         "/user/register",

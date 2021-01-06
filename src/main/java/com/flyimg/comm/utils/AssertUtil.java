@@ -1,7 +1,7 @@
 package com.flyimg.comm.utils;
 
 import com.flyimg.comm.enums.ResultCode;
-import com.flyimg.pojo.MyException;
+import com.flyimg.pojo.vo.MyException;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

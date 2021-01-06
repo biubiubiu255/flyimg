@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyimg.comm.enums.ResultCode;
 import com.flyimg.comm.utils.AssertUtil;
 import com.flyimg.comm.utils.CryptoUtils;
-import com.flyimg.dao.CodeMapper;
 import com.flyimg.dao.UserMapper;
 import com.flyimg.pojo.FileOss;
 import com.flyimg.pojo.SysConfig;
@@ -13,6 +12,7 @@ import com.flyimg.service.SysConfigService;
 import com.flyimg.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,8 +24,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
-    @Resource
-    private CodeMapper codeMapper;
+
     @Autowired
     private SysConfigService sysConfigService;
 
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserService {
         // 写入user对象并入库
         SysConfig sysConfig = sysConfigService.get();
         user.setPassword(CryptoUtils.encodeMD5(user.getPassword()));
-        user.setToken(CryptoUtils.encodeMD5(UUID.randomUUID().toString()));
+        user.setSecret(CryptoUtils.encodeMD5(UUID.randomUUID().toString()));
         user.setMemoryUsed(0);
         user.setMemory(sysConfig.getMaxMemoryUser().intValue());
         user.setStatus(1);
@@ -62,6 +61,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectUserByEmail(email);
     }
 
+    @Cacheable(value="comm", key="#root.targetClass+#root.methodName+#userid" )
     @Override
     public User get(Integer userid) {
         // TODO Auto-generated method stub
@@ -88,79 +88,16 @@ public class UserServiceImpl implements UserService {
         return balanceMem;
     }
 
-
     @Override
-    public Integer insertImg(FileOss img) {
-        // TODO Auto-generated method stub
-        return userMapper.insertimg(img);
-    }
+    public Integer updatePassword(Integer userid, String password, String newPassword) {
+        AssertUtil.isNotNullsEx(ResultCode.PARAM_NOT_COMPLETE, password, newPassword);
+        User user = get(userid);
+        AssertUtil.isTrue(password.equals(CryptoUtils.encodeMD5(user.getPassword())), ResultCode.USER_PASS_ERROR);
 
-    @Override
-    public Integer change(User user) {
-        // TODO Auto-generated method stub
-        return userMapper.change(user);
-    }
-
-    @Override
-    public Integer checkUsername(String username) {
-        // TODO Auto-generated method stub
-        return userMapper.checkUsername(username);
-    }
-
-    @Override
-    public Integer getUserTotal() {
-        // TODO Auto-generated method stub
-        return userMapper.getUserTotal();
-    }
-
-    @Override
-    public Integer deleUser(Integer id) {
-        return userMapper.deleuser(id);
-    }
-
-    @Override
-    public Integer countUsername(String username) {
-        return userMapper.countusername(username);
-    }
-
-    @Override
-    public Integer countMail(String email) {
-        return userMapper.countmail(email);
-    }
-
-    @Override
-    public List<User> getUserList(User user) {
-        return userMapper.getuserlist(user);
-    }
-
-    @Override
-    public Integer uidUser(String uid) {
-        return userMapper.uiduser(uid);
-    }
-
-    @Override
-    public User getUsersMail(String uid) {
-        return userMapper.getUsersMail(uid);
-    }
-
-    @Override
-    public Integer setIsok(User user) {
-        return userMapper.setisok(user);
-    }
-
-    @Override
-    public Integer setMemory(User user) {
-        return userMapper.setmemory(user);
-    }
-
-    @Override
-    public User getUsersid(Integer id) {
-        return userMapper.getUsersid(id);
-    }
-
-    @Override
-    public List<User> getUserListForGroupid(Integer groupid) {
-        return userMapper.getuserlistforgroupid(groupid);
+        User u = new User();
+        u.setId(userid);
+        u.setPassword(CryptoUtils.encodeMD5(newPassword));
+        return userMapper.updateById(u);
     }
 
 }

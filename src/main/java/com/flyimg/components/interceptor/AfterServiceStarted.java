@@ -1,5 +1,6 @@
-package com.flyimg.comm.utils;
+package com.flyimg.components.interceptor;
 
+import com.flyimg.comm.utils.Print;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;

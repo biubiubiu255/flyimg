@@ -2,6 +2,7 @@ package com.flyimg.controller.api;
 
 import com.flyimg.comm.enums.ResultCode;
 import com.flyimg.pojo.*;
+import com.flyimg.pojo.vo.Result;
 import com.flyimg.service.*;
 import com.flyimg.comm.utils.*;
 import io.swagger.annotations.Api;
@@ -51,10 +52,10 @@ public class ApiController {
     public Result up2(
             @RequestParam("file") List<MultipartFile> files,
             UploadParam uploadParam,
-            String key) {
+            String secret) {
 
-        AssertUtil.isNotNullsEx(ResultCode.PARAM_IS_BLANK, key);
-        User user = userService.getByKey(key);
+        AssertUtil.isNotNullsEx(ResultCode.PARAM_IS_BLANK, secret);
+        User user = userService.getByKey(secret);
         AssertUtil.isNotNullsEx(ResultCode.USER_NOT_EXIST, user);
 
         List<UploadResult> uploadResults = uploadService.uploadList(files, uploadParam, user.getId());
@@ -84,10 +85,10 @@ public class ApiController {
 
     @PostMapping(value = "/up/ticket")
     @ApiOperation(tags = "文件上传", value = "获取临时上传票据")
-    public Result cicket(String token) {
+    public Result cicket(String secret) {
         // 校验用户私匙是否正确
-        AssertUtil.isNotNullsEx(ResultCode.PARAM_IS_BLANK, token);
-        User user = userService.getByKey(token);
+        AssertUtil.isNotNullsEx(ResultCode.PARAM_IS_BLANK, secret);
+        User user = userService.getByKey(secret);
         AssertUtil.isNotNullsEx(ResultCode.USER_NOT_EXIST, user);
         // 生成临时票据，写入到线程安全map中
         String tk = UUID.randomUUID().toString() ;
@@ -96,22 +97,5 @@ public class ApiController {
     }
 
 
-
-    @GetMapping("/getNotice")
-    @ResponseBody
-    public Msg getNotice() {
-        Msg msg = new Msg();
-        String url = "http://tc.hellohao.cn/getNoticeText";
-        if(TestUrl.testUrlWithTimeOut(url,2000)){
-            String urls =url;
-            //msg.setData(HttpUtil.get(urls));
-        }else{
-            msg.setData("暂无公告");
-        }
-        return msg;
-    }
-
-
-
-
+    
 }

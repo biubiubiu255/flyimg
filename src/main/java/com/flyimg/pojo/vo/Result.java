@@ -1,4 +1,4 @@
-package com.flyimg.pojo;
+package com.flyimg.pojo.vo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.flyimg.comm.enums.ResultCode;

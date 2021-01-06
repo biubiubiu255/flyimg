@@ -16,7 +16,7 @@ spring:
         type: caffeine
         caffeine:
             spec: initialCapacity=10,maximumSize=200,expireAfterWrite=300s #,refreshAfterWrite=10s
-        cache-names: user #可以用,号分割多个
+        cache-names: comm #可以用,号分割多个
     # jackson时间格式化
     jackson:
         time-zone: GMT+8
@@ -39,5 +39,6 @@ Expression: 0 30 04 * * ?
 systemupdate: '2019-11-29'
 
 #以下为框架业务配置 ==================================
+adminHost: oss.aa.com
 defalutHost: 127.0.0.1
 writeDirectory: /flyimgfile/

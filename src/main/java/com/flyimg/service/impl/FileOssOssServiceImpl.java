@@ -3,15 +3,15 @@ package com.flyimg.service.impl;
 
 import com.flyimg.dao.FileListMapper;
 import com.flyimg.pojo.FileOss;
-import com.flyimg.pojo.Keys;
 import com.flyimg.service.FileOssService;
-import com.flyimg.comm.utils.Print;
 
-import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.List;
 
 @Service
@@ -19,6 +19,10 @@ public class FileOssOssServiceImpl implements FileOssService {
 
     @Resource
     private FileListMapper fileListMapper;
+
+
+    @Value("${writeDirectory}")
+    private String rootDirectory;
 
     @Override
     public Integer add(FileOss fileOss) {
@@ -31,87 +35,48 @@ public class FileOssOssServiceImpl implements FileOssService {
     }
 
     @Override
+    public FileOss getByUriGuess(String uri) {
+        return fileListMapper.selectOneByUriGuess(uri);
+    }
+
+    @Override
+    public Long writeOutputStream(String md5, String suffix,  ByteArrayOutputStream byteArrayOutputStream) {
+        Long len = 0L;
+        try {
+            InputStream input = new FileInputStream(new File(rootDirectory + md5));
+            BufferedImage buff= ImageIO.read(input);
+            //将图片输出给浏览器
+            //DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            ImageIO.write(buff, suffix, byteArrayOutputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return len;
+        }
+        return len;
+    }
+
+    @Override
+    public Long writeOutputStreamQ(String md5, String suffix, OutputStream outputStream) {
+        Long len = 0L;
+        try {
+            File file = new File(rootDirectory + md5);
+            FileInputStream inputStream = new FileInputStream(file);
+            byte[] bytes = new byte[inputStream.available()];
+            outputStream.write(bytes);
+            outputStream.flush();
+            //关闭响应输出流
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return len;
+        }
+        return len;
+    }
+
+    @Override
     public Integer updataFileOss(FileOss fileOSS) {
         return fileListMapper.updateById(fileOSS);
     }
 
-    @Override
-    public List<FileOss> selectimg(FileOss fileOSS) {
-        // TODO Auto-generated method stub
-        return fileListMapper.selectList(fileOSS);
-    }
 
-    @Override
-    public Integer deleimg(Integer id) {
-        // TODO Auto-generated method stub
-        return fileListMapper.deleteById(id);
-    }
-
-
-    public FileOss selectByPrimaryKey(Integer id) {
-        return fileListMapper.selectByPrimaryKey(id);
-    }
-
-    public void delectFTP(Keys key, String fileName) {
-        FTPClient ftp = new FTPClient();
-        String[] host = key.getEndpoint().split("\\:");
-        String h = host[0];
-        Integer p = Integer.parseInt(host[1]);
-        try {
-            if(!ftp.isConnected()){
-                ftp.connect(h,p);
-            }
-            ftp.login(key.getAccessKey(), key.getAccessSecret());
-            ftp.deleteFile(fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Print.warning("删除FTP存储的图片失败");
-        }
-    }
-    @Override
-    public Integer counts(Integer userid) {
-        // TODO Auto-generated method stub
-        return fileListMapper.counts(userid);
-    }
-
-    @Override
-    public Integer countimg(Integer userid) {
-        // TODO Auto-generated method stub
-        return fileListMapper.count(userid);
-    }
-
-    @Override
-    public Integer setImg(FileOss fileOSS) {
-        return fileListMapper.updateByFilename(fileOSS);
-    }
-
-    @Override
-    public Integer deleimgname(String imgname) {
-        return fileListMapper.deleteByFilename(imgname);
-    }
-
-    @Override
-    public Integer deleall(Integer id) {
-        return fileListMapper.deleAll(id);
-    }
-
-    @Override
-    public List<FileOss> gettimeimg(String time) {
-        return fileListMapper.selectListFromTime(time);
-    }
-
-    @Override
-    public Integer getusermemory(Integer userid) {
-        return fileListMapper.selectMoneyUsed(userid);
-    }
-
-    @Override
-    public Integer md5Count(String md5key) {
-        return fileListMapper.md5Count(md5key);
-    }
-
-    @Override
-    public FileOss selectImgUrlByMD5(String md5key) {
-        return fileListMapper.selectUriByMd5(md5key);
-    }
 }

@@ -4,8 +4,9 @@ import com.flyimg.comm.enums.ResultCode;
 import com.flyimg.comm.utils.AssertUtil;
 import com.flyimg.comm.utils.JWTUtil;
 import com.flyimg.comm.utils.WebUtil;
-import com.flyimg.pojo.MyException;
+import com.flyimg.pojo.vo.MyException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,15 +19,22 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class InterceptorLogin implements HandlerInterceptor {
 
+    @Value("${adminHost}")
+    private String adminHost;
+
     /**
      * 进入controller层之前拦截请求
      * 这个方法是在访问接口之前执行的，我们只需要在这里写验证登陆状态的业务逻辑，就可以在用户调用指定接口之前验证登陆状态了
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String host = request.getHeader("Host");
+        if (!host.startsWith(adminHost)){
+            return true;
+        }
 
         // 从request里取出token，支持cooke与header两种方式
         String token  = WebUtil.getCookie(request, "oss_u_token");
-        if (StringUtils.isNotEmpty(token)){
+        if (StringUtils.isEmpty(token)){
             token = request.getHeader("oss_u_token");
         }
 

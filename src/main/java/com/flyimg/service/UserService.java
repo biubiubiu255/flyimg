@@ -36,31 +36,8 @@ public interface UserService {
      */
     Long getMemAndUsedMemIncr(Integer userid, Long decreaseMem);
 
-    //插入图片
-    Integer insertImg(FileOss img);
-
-    //修改资料
-    Integer change(User user);
-
-    //检查用户名是否重复
-    Integer checkUsername(String username);
-
-    Integer getUserTotal();
-
-    List<User> getUserList(User user);
-
-    Integer deleUser(Integer id);
-
-    //查询用户名或者邮箱是否存在
-    Integer countUsername(String username);
-
-    Integer countMail(String email);
-
-    Integer uidUser(String uid);
-
-    User getUsersMail(String uid);
-    Integer setIsok(User user);
-    Integer setMemory(User user);
-    User getUsersid(Integer id);
-    List<User> getUserListForGroupid(Integer groupid);
+    /**
+     * 修改密码
+     */
+    Integer updatePassword(Integer userid, String password, String newPassword);
 }

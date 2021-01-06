@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 
@@ -283,5 +284,16 @@ public class CryptoUtils {
             IOUtils.closeQuietly(input);
         }
     }
+
+    public static String encodeUrl(String content) {
+        try {
+            return URLEncoder.encode(content, "UTF-8");
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
 }
+
+
 

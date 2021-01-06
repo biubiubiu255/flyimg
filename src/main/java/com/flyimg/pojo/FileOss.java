@@ -22,6 +22,7 @@ public class FileOss {
     private Integer userid;
     private String suffix;
     private Integer headerCode;
+    private Integer size;
     private Long expire;
     private Long updatedTime;
 
